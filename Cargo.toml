@@ -8,3 +8,4 @@ authors = ["masamallow"]
 anyhow = "1.0.97"
 clap = { version = "4.5.32", features = ["derive"] }
 tempfile = "3.19.0"
+walkdir = "2.5.0"
