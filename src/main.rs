@@ -1,5 +1,6 @@
+use std::path::Path;
 use clap::Parser;
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 
 /// CLI tool for creating zip files that don't get garbled on Windows.
 #[derive(Parser, Debug)]
@@ -15,13 +16,13 @@ struct Args {
 fn main() -> Result<()> {
     let args = Args::parse();
 
-    // Checking argument contents (for debugging)
-    println!("Target directory: {}", args.target_dir);
-    if let Some(out) = args.output_file.as_ref() {
-        println!("Output file name: {}", out);
-    } else {
-        println!("Output file name omitted");
+    let target_path = Path::new(&args.target_dir);
+    if !target_path.is_dir() {
+        return Err(anyhow!("Directory '{}' does not exist.", args.target_dir));
     }
+
+    // Checking for debugging purposes.
+    println!("Directory '{}' exists.", args.target_dir);
 
     Ok(())
 }
