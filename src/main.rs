@@ -1,14 +1,14 @@
 use clap::Parser;
 use anyhow::Result;
 
-/// CLI tool for creating ZIP files that don't get garbled on Windows
+/// CLI tool for creating zip files that don't get garbled on Windows.
 #[derive(Parser, Debug)]
 #[command(version, about)]
 struct Args {
-    /// Target directory you want to ZIP compress
+    /// Target directory to zip.
     target_dir: String,
 
-    /// Output file name (directory name.zip if omitted)
+    /// Output zip file name. (optional; defaults to <directory_name>.zip)
     output_file: Option<String>,
 }
 
