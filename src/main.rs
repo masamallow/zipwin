@@ -70,21 +70,6 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-/// Recursively lists all files inside a given directory.
-fn list_files(dir: &Path) -> Result<Vec<PathBuf>> {
-    let mut files = Vec::new();
-
-    for entry in WalkDir::new(dir).into_iter().filter_map(|e| e.ok()) {
-        let path = entry.path();
-
-        if path.is_file() {
-            files.push(path.to_path_buf());
-        }
-    }
-
-    Ok(files)
-}
-
 /// Convert UTF-8 file name to CP932 encoding.
 fn convert_to_cp932(filename: &str) -> Result<String> {
     let (encoded, _, _) = SHIFT_JIS.encode(filename);
