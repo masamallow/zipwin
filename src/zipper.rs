@@ -21,8 +21,7 @@ pub fn create_zip(target_path: &Path, output_file: &PathBuf) -> Result<()> {
     let pb = ProgressBar::new(files.len() as u64);
     pb.set_style(
         ProgressStyle::default_bar()
-            .template("[{bar:40}] {pos}/{len} {msg}")
-            .unwrap()
+            .template("[{bar:40}] {pos}/{len} {msg}")?
     );
 
     // List up all files inside the directory (recursively).
