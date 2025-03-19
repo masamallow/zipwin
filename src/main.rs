@@ -12,7 +12,8 @@ fn main() -> Result<()> {
 
     let target_path = Path::new(&args.target_dir);
     if !target_path.is_dir() {
-        return Err(anyhow!("Directory '{}' does not exist.", args.target_dir));
+        eprintln!("Error: Directory '{}' does not exist.", args.target_dir);
+        std::process::exit(1);
     }
 
     // Determine output zip file name
@@ -27,7 +28,11 @@ fn main() -> Result<()> {
         }
     };
 
-    create_zip(target_path, &output_file)?;
+    if let Err(e) = create_zip(target_path, &output_file) {
+        eprintln!("Error: Failed to create ZIP file: {}", e);
+        std::process::exit(1);
+    }
 
+    println!("zip file created successfully: {:?}", output_file);
     Ok(())
 }
