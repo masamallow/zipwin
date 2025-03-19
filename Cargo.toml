@@ -8,5 +8,6 @@ authors = ["masamallow"]
 anyhow = "1.0.97"
 clap = { version = "4.5.32", features = ["derive"] }
 encoding_rs = "0.8.35"
+indicatif = "0.17.11"
 walkdir = "2.5.0"
 zip = "2.4.1"
