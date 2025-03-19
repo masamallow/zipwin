@@ -4,8 +4,8 @@ mod zipper;
 
 use std::path::{Path, PathBuf};
 use anyhow::{anyhow, Result};
-use args::Args;
-use zipper::create_zip;
+use crate::args::Args;
+use crate::zipper::create_zip;
 
 fn main() -> Result<()> {
     let args = Args::parse_args();
