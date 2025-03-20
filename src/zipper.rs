@@ -4,8 +4,8 @@ use indicatif::{ProgressBar, ProgressStyle};
 use std::fs::File;
 use std::path::{Path, PathBuf};
 use walkdir::WalkDir;
-use zip::write::{ExtendedFileOptions, FileOptions};
 use zip::ZipWriter;
+use zip::write::{ExtendedFileOptions, FileOptions};
 
 /// Create a zip file from a target directory.
 pub fn create_zip(target_path: &Path, output_file: &PathBuf) -> Result<()> {

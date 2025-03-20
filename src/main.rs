@@ -4,7 +4,7 @@ mod zipper;
 
 use crate::args::Args;
 use crate::zipper::create_zip;
-use anyhow::{anyhow, Result};
+use anyhow::{Result, anyhow};
 use std::path::{Path, PathBuf};
 
 fn main() -> Result<()> {
