@@ -9,7 +9,7 @@ use zip::ZipWriter;
 
 /// Create a zip file from a target directory.
 pub fn create_zip(target_path: &Path, output_file: &PathBuf) -> Result<()> {
-    let zip_file = File::create(&output_file)?;
+    let zip_file = File::create(output_file)?;
     let mut zip = ZipWriter::new(zip_file);
 
     let files: Vec<_> = WalkDir::new(target_path)
