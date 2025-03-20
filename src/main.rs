@@ -2,10 +2,10 @@ mod args;
 mod encoding;
 mod zipper;
 
-use std::path::{Path, PathBuf};
-use anyhow::{anyhow, Result};
 use crate::args::Args;
 use crate::zipper::create_zip;
+use anyhow::{anyhow, Result};
+use std::path::{Path, PathBuf};
 
 fn main() -> Result<()> {
     let args = Args::parse_args();
@@ -20,7 +20,8 @@ fn main() -> Result<()> {
     let output_file = match &args.output_file {
         Some(name) => PathBuf::from(name),
         None => {
-            let dir_name = target_path.file_name()
+            let dir_name = target_path
+                .file_name()
                 .ok_or_else(|| anyhow!("Invalid directory name"))?
                 .to_string_lossy()
                 .to_string();
