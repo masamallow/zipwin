@@ -8,6 +8,7 @@ license-file = "LICENSE"
 repository = "https://github.com/masamallow/zipwin"
 categories = ["command-line-utilities", "compression"]
 keywords = ["cli", "zip", "encoding", "windows"]
+publish = false
 
 [dependencies]
 anyhow = "1.0.97"
