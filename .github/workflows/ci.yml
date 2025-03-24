@@ -16,9 +16,6 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
-      - name: Set up Rust
-        uses: dtolnay/rust-toolchain@stable
-
       - name: Cache dependencies
         uses: Swatinem/rust-cache@v2
         with:
