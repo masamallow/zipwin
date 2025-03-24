@@ -10,6 +10,10 @@ categories = ["command-line-utilities", "compression"]
 keywords = ["cli", "zip", "encoding", "windows"]
 publish = false
 
+[package.metadata.release]
+pre-release-hook = ["git", "cliff", "--prepend", "CHANGELOG.md", "--tag", "{{version}}", "--unreleased"]
+pre-release-commit-message = "chore(release): prepare for version {{version}} release"
+
 [dependencies]
 anyhow = "1.0.97"
 clap = { version = "4.5.32", features = ["derive"] }

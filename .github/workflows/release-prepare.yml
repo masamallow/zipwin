@@ -3,44 +3,87 @@ name: Prepare Release
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  CARGO_TERM_COLOR: always
+
 jobs:
-  prepare:
+  crate-release-pull-request:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          fetch-tags: true
 
-      - uses: dtolnay/rust-toolchain@stable
+      # TODO Consider using `taiki-e/install-action` instead of `baptiste0928/cargo-install`.
+      #  See: https://github.com/taiki-e/install-action
+      - name: Install cargo-release from crates.io
+        uses: baptiste0928/cargo-install@v3
+        with:
+          crate: cargo-release
 
-      - name: Install cargo-release
-        run: cargo install cargo-release
+      - name: Install git-cliff from crates.io
+        uses: baptiste0928/cargo-install@v3
+        with:
+          # TODO Consider using git cliff GitHub Actions instead of installing it.
+          #  See: https://git-cliff.org/docs/category/github-actions
+          crate: git-cliff
+
+      - name: Propose version bump level
+        id: propose-bump-level
+        # TODO Maybe `cargo release changes` could be used to determine this?
+        run: |
+          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          range=${latest_tag:+"$latest_tag..HEAD"}
+          echo "range=$range"
+          level=$(git log --pretty='format:%C(auto)%h %s %b' $range | {
+            log=$(cat)
+            if echo "$log" | grep -qE '(feat|fix|refactor|build|chore|ci|docs|style|test|perf)!:|BREAKING CHANGE'; then
+              echo "major"
+            elif echo "$log" | grep -qE 'feat:'; then
+              echo "minor"
+            else
+              echo "patch"
+            fi
+          })
+          echo "Proposed bump level=$level"
+          echo "level=$level" >> "$GITHUB_OUTPUT"
 
       - name: Configure Git identity
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
 
-      - name: Generate changelog & bump version
-        # No publish because this is CLI tool
+      - name: Prepend changelog & bump version
+        id: prepend-changelog-bump-version
         run: |
-          cargo release ${{ github.event.inputs.level }} \
-            --no-publish \
+          cargo release ${{ steps.propose-bump-level.outputs.level }} \
             --no-push \
             --no-tag \
-            --generate-changelog \
-            --no-confirm
+            --no-confirm \
+            --execute \
+            --verbose
+          new_version=$(cargo pkgid | cut -d@ -f2)
+          echo "Proposed new version=$new_version"
+          echo "new_version=$new_version" >> "$GITHUB_OUTPUT"
 
       - name: Create release PR
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v7
         with:
-          commit-message: "chore(release): prepare for ${{ github.event.inputs.level }} release"
-          title: "chore(release): ${{ github.event.inputs.level }} release"
-          branch: release/${{ github.event.inputs.level }}-$(date +%s)
+          branch: release/v${{ steps.prepend-changelog-bump-version.outputs.new_version }}-id-${{ github.run_id }}
+          title: "chore(release): Release version ${{ steps.prepend-changelog-bump-version.outputs.new_version }}"
           body: |
             This PR contains:
-            - version bump
-            - generated CHANGELOG.md
+            - Version bump
+            - Update CHANGELOG.md
 
             Please review and edit the changelog as needed before merging.
+          commit-message: "chore(release): Prepare version ${{ steps.prepend-changelog-bump-version.outputs.new_version }} ${{ steps.propose-bump-level.outputs.level }} release"
+          base: main
+          draft: true
+          assignees: ${{ github.actor }}
