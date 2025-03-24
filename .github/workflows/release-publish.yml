@@ -1,9 +1,10 @@
 name: Publish Release
 
-on:
-  push:
-    tags:
-      - 'v*.*.*'
+# TODO uncomment when release flow is ready
+#on:
+#  push:
+#    tags:
+#      - 'v*.*.*'
 
 jobs:
   release:
@@ -13,29 +14,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - uses: dtolnay/rust-toolchain@stable
+      - name: Create tag
+        # TODO fetch version and create tag
 
-      - name: Install cargo-release
-        run: cargo install cargo-release
-
-      - name: Determine next version bump from Conventional Commits
-        id: bump
-        run: |
-          COMMITS=$(git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"%s%n%b")
-          if echo "$COMMITS" | grep -q "BREAKING CHANGE"; then
-            echo "level=major" >> $GITHUB_OUTPUT
-          elif echo "$COMMITS" | grep -q "^feat"; then
-            echo "level=minor" >> $GITHUB_OUTPUT
-          else
-            echo "level=patch" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Bump version & tag
-        run: |
-          cargo release ${{ steps.bump.outputs.level }} --execute --no-publish --no-confirm
+      # TODO create release ??
 
       - name: Build binary
         run: cargo build --release
