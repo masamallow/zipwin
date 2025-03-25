@@ -19,8 +19,8 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Create tag
-        # TODO fetch version and create tag
+      # TODO fetch version and create tag
+      #- name: Create tag
 
       # TODO create release ??
 
