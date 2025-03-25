@@ -22,6 +22,7 @@ jobs:
 
       # TODO Consider using `taiki-e/install-action` instead of `baptiste0928/cargo-install`.
       #  See: https://github.com/taiki-e/install-action
+      # TODO Set `sign-commit` field or `--sign-commit` flag, OR don't use cargo-release.
       - name: Install cargo-release from crates.io
         uses: baptiste0928/cargo-install@v3
         with:
