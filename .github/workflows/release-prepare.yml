@@ -22,7 +22,6 @@ jobs:
 
       # TODO Consider using `taiki-e/install-action` instead of `baptiste0928/cargo-install`.
       #  See: https://github.com/taiki-e/install-action
-      # TODO Exec with `--sign` flag, OR don't use cargo-release.
       - name: Install cargo-release from crates.io
         uses: baptiste0928/cargo-install@v3
         with:
@@ -68,6 +67,7 @@ jobs:
             --no-tag \
             --no-confirm \
             --execute \
+            --sign \
             --verbose
           new_version=$(cargo pkgid | cut -d@ -f2)
           echo "Proposed new version=$new_version"
