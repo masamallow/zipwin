@@ -6,12 +6,13 @@ name: Publish Release
 #    tags:
 #      - 'v*.*.*'
 
+permissions: { }
+
 jobs:
   release:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-
+      contents: read
     steps:
       - uses: actions/checkout@v4
 

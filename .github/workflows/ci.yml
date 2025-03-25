@@ -6,12 +6,16 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions: { }
+
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
   build-n-test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Check out code
         uses: actions/checkout@v4
