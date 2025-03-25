@@ -15,10 +15,12 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           fetch-tags: true
+          persist-credentials: false
 
       # TODO Consider using `taiki-e/install-action` instead of `baptiste0928/cargo-install`.
       #  See: https://github.com/taiki-e/install-action
