@@ -6,17 +6,21 @@ name: Publish Release
 #    tags:
 #      - 'v*.*.*'
 
+permissions: { }
+
 jobs:
   release:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-
+      contents: read
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
-      - name: Create tag
-        # TODO fetch version and create tag
+      # TODO fetch version and create tag
+      #- name: Create tag
 
       # TODO create release ??
 

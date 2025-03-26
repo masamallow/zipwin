@@ -3,9 +3,7 @@ name: Prepare Release
 on:
   workflow_dispatch:
 
-permissions:
-  contents: write
-  pull-requests: write
+permissions: { }
 
 env:
   CARGO_TERM_COLOR: always
@@ -13,12 +11,16 @@ env:
 jobs:
   crate-release-pull-request:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           fetch-tags: true
+          persist-credentials: false
 
       # TODO Consider using `taiki-e/install-action` instead of `baptiste0928/cargo-install`.
       #  See: https://github.com/taiki-e/install-action
@@ -67,6 +69,7 @@ jobs:
             --no-tag \
             --no-confirm \
             --execute \
+            --sign \
             --verbose
           new_version=$(cargo pkgid | cut -d@ -f2)
           echo "Proposed new version=$new_version"

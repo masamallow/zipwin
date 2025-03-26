@@ -6,15 +6,21 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions: { }
+
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
   build-n-test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - name: Check out code
+      - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Cache dependencies
         uses: Swatinem/rust-cache@v2
